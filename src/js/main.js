@@ -1,26 +1,26 @@
 
 // Create map instance
-// var chart = am4core.create("chartdiv", am4maps.MapChart);
-// chart.seriesContainer.resizable = false;
-// chart.zoomControl = new am4maps.ZoomControl();
-// chart.chartContainer.wheelable = false;
+var chart = am4core.create("chartdiv", am4maps.MapChart);
+chart.seriesContainer.resizable = false;
+chart.zoomControl = new am4maps.ZoomControl();
+chart.chartContainer.wheelable = false;
 
 // // Set map definition
-// chart.geodata = am4geodata_usaLow;
+chart.geodata = am4geodata_usaLow;
 
 // // Set projection
-// chart.projection = new am4maps.projections.AlbersUsa();
+chart.projection = new am4maps.projections.AlbersUsa();
 
 // // Create map polygon series
-// var polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
-// polygonSeries.useGeodata = true;
+var polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
+polygonSeries.useGeodata = true;
 
 // // Configure series
-// var polygonTemplate = polygonSeries.mapPolygons.template;
+var polygonTemplate = polygonSeries.mapPolygons.template;
 // // polygonTemplate.tooltipText = "{name}";
-// polygonTemplate.fill = am4core.color("#DEE7F0");
-// polygonTemplate.stroke = am4core.color("#FFFFFF");
-// polygonTemplate.strokeWidth = 2;
+polygonTemplate.fill = am4core.color("#DEE7F0");
+polygonTemplate.stroke = am4core.color("#FFFFFF");
+polygonTemplate.strokeWidth = 2;
 
 
 // ============== Helpers ==============
@@ -206,14 +206,16 @@ __m__build_list(offices);
 // ============== Filter functions ==============
 function __m__filter_by_name(q) {
     const r = offices.filter(o => o.name.toLowerCase().includes(q.toLowerCase()));
-    if (r.length > 0) {
-        __m__build_list(r);
-    } else {
-        __m__build_list(offices);
-    }
+    r.length > 0 ? __m__build_list(r) : mainArea.trigger('map:not-found');
 }
-function __m__filter_by_state(value) {}
-function __m__filter_by_city(value) {}
+function __m__filter_by_state(q) {
+    const r = offices.filter(o => o.state === q);
+    r.length > 0 ? __m__build_list(r) : mainArea.trigger('map:not-found');
+}
+function __m__filter_by_city(q) {
+    const r = offices.filter(o => o.city === q);
+    r.length > 0 ? __m__build_list(r) : mainArea.trigger('map:not-found');
+}
 
 // ============== Filter events ==============
 // Search input
@@ -223,12 +225,17 @@ mainArea.on('map:search', (e, q) => {
 
 // Change State 
 mainArea.on('map:state', (e, value) => {
-    console.log('State', value);
+    __m__filter_by_state(value);
 });
 
 // Change City
 mainArea.on('map:city', (e, value) => {
-    console.log('City', value);
+    __m__filter_by_city(value);
+});
+
+// no filter/search result
+mainArea.on('map:not-found', () => {
+    __m__build_list(offices);
 });
 
 // ============== Dom events ==============

@@ -1,25 +1,25 @@
 "use strict";
 
 // Create map instance
-// var chart = am4core.create("chartdiv", am4maps.MapChart);
-// chart.seriesContainer.resizable = false;
-// chart.zoomControl = new am4maps.ZoomControl();
-// chart.chartContainer.wheelable = false;
-// // Set map definition
-// chart.geodata = am4geodata_usaLow;
-// // Set projection
-// chart.projection = new am4maps.projections.AlbersUsa();
-// // Create map polygon series
-// var polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
-// polygonSeries.useGeodata = true;
-// // Configure series
-// var polygonTemplate = polygonSeries.mapPolygons.template;
-// // polygonTemplate.tooltipText = "{name}";
-// polygonTemplate.fill = am4core.color("#DEE7F0");
-// polygonTemplate.stroke = am4core.color("#FFFFFF");
-// polygonTemplate.strokeWidth = 2;
-// ============== Helpers ==============
+var chart = am4core.create("chartdiv", am4maps.MapChart);
+chart.seriesContainer.resizable = false;
+chart.zoomControl = new am4maps.ZoomControl();
+chart.chartContainer.wheelable = false; // // Set map definition
+
+chart.geodata = am4geodata_usaLow; // // Set projection
+
+chart.projection = new am4maps.projections.AlbersUsa(); // // Create map polygon series
+
+var polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
+polygonSeries.useGeodata = true; // // Configure series
+
+var polygonTemplate = polygonSeries.mapPolygons.template; // // polygonTemplate.tooltipText = "{name}";
+
+polygonTemplate.fill = am4core.color("#DEE7F0");
+polygonTemplate.stroke = am4core.color("#FFFFFF");
+polygonTemplate.strokeWidth = 2; // ============== Helpers ==============
 // Slugify a string
+
 function slugify(str) {
   str = str.replace(/^\s+|\s+$/g, ''); // Make the string lowercase
 
@@ -184,17 +184,22 @@ function __m__filter_by_name(q) {
   var r = offices.filter(function (o) {
     return o.name.toLowerCase().includes(q.toLowerCase());
   });
-
-  if (r.length > 0) {
-    __m__build_list(r);
-  } else {
-    __m__build_list(offices);
-  }
+  r.length > 0 ? __m__build_list(r) : mainArea.trigger('map:not-found');
 }
 
-function __m__filter_by_state(value) {}
+function __m__filter_by_state(q) {
+  var r = offices.filter(function (o) {
+    return o.state === q;
+  });
+  r.length > 0 ? __m__build_list(r) : mainArea.trigger('map:not-found');
+}
 
-function __m__filter_by_city(value) {} // ============== Filter events ==============
+function __m__filter_by_city(q) {
+  var r = offices.filter(function (o) {
+    return o.city === q;
+  });
+  r.length > 0 ? __m__build_list(r) : mainArea.trigger('map:not-found');
+} // ============== Filter events ==============
 // Search input
 
 
@@ -203,11 +208,15 @@ mainArea.on('map:search', function (e, q) {
 }); // Change State 
 
 mainArea.on('map:state', function (e, value) {
-  console.log('State', value);
+  __m__filter_by_state(value);
 }); // Change City
 
 mainArea.on('map:city', function (e, value) {
-  console.log('City', value);
+  __m__filter_by_city(value);
+}); // no filter/search result
+
+mainArea.on('map:not-found', function () {
+  __m__build_list(offices);
 }); // ============== Dom events ==============
 
 mapSearch.on('keyup', function (e) {

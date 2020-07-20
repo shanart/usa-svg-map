@@ -1,21 +1,39 @@
+
 body, html {
     font-family: sans-serif;
     margin: 0;
     padding: 0;
 }
 
+$blue: #00478E;
+$orange: #FF5D00;
+$gray-100: #CDD8E3;
+$f_color-base: #36282F;
+$f_color-light: #4E4E4E;
+
 .container {
-  max-width: 1200px;
   margin: 0 auto;
 }
 
 .m-container {
-  margin: 50px 0;
+  max-width: 1027px;
+  margin: 0 auto;
 }
 
 .m-top-filter {
   display: flex;
   justify-content: space-between;
+  margin: 70px -10px 40px;
+
+  &--city, &--search, &--state {
+    padding: 0 10px;
+  }
+  &--search {
+    width: 60%;
+  }
+  &--city, &--state {
+    width: 20%;
+  }
 }
 
 .m-table {
@@ -23,18 +41,52 @@ body, html {
   .m-thead {
     display: flex;
     font-weight: bold;
+    color: $blue;
+    padding-bottom: 25px;
+    border-bottom: 2px solid $blue;
   }
 }
 
 .mo-item {
   display: flex;
+  padding: 20px 0;
+  border-bottom: 1px solid $gray-100;
+  color: $f_color-light;
+
+  .name { color: $f_color-base }
+  .state { text-align: right }
+
+  a {
+    color: $orange;
+    text-decoration: none;
+  }
 }
 
 .mo-item-cell,
 .m-thead-th {
-  &.name    { width: 42% }
-  &.phone   { width: 14% }
-  &.website { width: 25% }
+  &.name    { width: 35% }
+  &.phone   { width: 18% }
+  &.website { width: 28% }
   &.city    { width: 13% }
   &.state   { width:  6% }
+}
+
+
+// ============== Filter inputs ==============
+.m-filter-search,
+.m-filter-select {
+  height: 55px;
+  line-height: 55px;
+  border-radius: 8px;
+  border: 1px solid #CDD8E3;
+  padding: 0 20px;
+  width: 100%;
+  background-color: transparent;
+  outline: none!important;
+}
+
+.m-filter-select {
+  &:focus {
+    outline: none!important;
+  }
 }
