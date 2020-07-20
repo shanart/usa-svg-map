@@ -18,6 +18,37 @@
 // polygonTemplate.fill = am4core.color("#DEE7F0");
 // polygonTemplate.stroke = am4core.color("#FFFFFF");
 // polygonTemplate.strokeWidth = 2;
+// ============== Helpers ==============
+// Slugify a string
+function slugify(str) {
+  str = str.replace(/^\s+|\s+$/g, ''); // Make the string lowercase
+
+  str = str.toLowerCase(); // Remove accents, swap ñ for n, etc
+
+  var from = "ÁÄÂÀÃÅČÇĆĎÉĚËÈÊẼĔȆÍÌÎÏŇÑÓÖÒÔÕØŘŔŠŤÚŮÜÙÛÝŸŽáäâàãåčçćďéěëèêẽĕȇíìîïňñóöòôõøðřŕšťúůüùûýÿžþÞĐđßÆa·/_,:;";
+  var to = "AAAAAACCCDEEEEEEEEIIIINNOOOOOORRSTUUUUUYYZaaaaaacccdeeeeeeeeiiiinnooooooorrstuuuuuyyzbBDdBAa------";
+
+  for (var i = 0, l = from.length; i < l; i++) {
+    str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+  } // Remove invalid chars
+
+
+  str = str.replace(/[^a-z0-9 -]/g, '') // Collapse whitespace and replace by -
+  .replace(/\s+/g, '-') // Collapse dashes
+  .replace(/-+/g, '-');
+  return str;
+}
+
+if (!String.prototype.startsWith) {
+  Object.defineProperty(String.prototype, 'startsWith', {
+    value: function value(search, rawPos) {
+      var pos = rawPos > 0 ? rawPos | 0 : 0;
+      return this.substring(pos, pos + search.length) === search;
+    }
+  });
+} // ============== Data ==============
+
+
 var states = ['AL', 'AK', 'AS', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FM', 'FL', 'GA', 'GU', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MH', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'MP', 'OH', 'OK', 'OR', 'PW', 'PA', 'PR', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VI', 'VA', 'WA', 'WV', 'WI', 'WY'];
 var offices = [{
   name: 'Acacio Fertility Center',
@@ -104,10 +135,10 @@ var mapArea = $('[data-m-area="map-area"]');
 var mapStates = $('[data-m-area="states"]');
 var mapCities = $('[data-m-area="cities"]');
 var mapSearch = $('[data-m-area="search"]');
-var mainArea = $('[data-m-area="main"]');
+var mainArea = $('[data-m-area="main"]'); // ============== DOM builders ==============
 
 function __m__build_item(item) {
-  return '<div class="mo-item" data-location-lng="' + item.lng + '" data-location-lat="' + item.lat + '">' + '    <div class="mo-item-cell name">' + item.name + '</div>' + '    <div class="mo-item-cell phone"><a href="tel:' + item.phone + '">' + item.phone + '</a></div>' + '    <div class="mo-item-cell website"><a href="https://' + item.website + '">' + item.website + '</a></div>' + '    <div class="mo-item-cell city">' + item.city + '</div>' + '    <div class="mo-item-cell state">' + item.state + '</div></div>';
+  return '<div class="mo-item">' + '    <div class="mo-item-cell name">' + item.name + '</div>' + '    <div class="mo-item-cell phone"><a href="tel:' + item.phone + '">' + item.phone + '</a></div>' + '    <div class="mo-item-cell website"><a href="https://' + item.website + '">' + item.website + '</a></div>' + '    <div class="mo-item-cell city">' + item.city + '</div>' + '    <div class="mo-item-cell state">' + item.state + '</div></div>';
 }
 
 function __m__build_list(list) {
@@ -136,7 +167,8 @@ function __m__collect_cities() {
     return output += '<option value="' + c + '">' + c + '</option>';
   });
   mapCities.html(output);
-} // build cities dropdown
+} // ============== DOM startup ==============
+// build cities dropdown
 
 
 __m__collect_cities(); // build states dropdown
@@ -145,12 +177,30 @@ __m__collect_cities(); // build states dropdown
 __m__build_states(states); // starter list
 
 
-__m__build_list(offices); // ============== Filter events ==============
+__m__build_list(offices); // ============== Filter functions ==============
+
+
+function __m__filter_by_name(q) {
+  // build_list(data_diseases.filter(item => item.title.toLowerCase().startsWith(q.toLowerCase())));
+  var r = offices.filter(function (o) {
+    return o.name.toLowerCase().includes(q.toLowerCase());
+  });
+
+  if (r.length > 0) {
+    __m__build_list(r);
+  } else {
+    __m__build_list(offices);
+  }
+}
+
+function __m__filter_by_state(value) {}
+
+function __m__filter_by_city(value) {} // ============== Filter events ==============
 // Search input
 
 
-mainArea.on('map:search', function (e, value) {
-  console.log(value);
+mainArea.on('map:search', function (e, q) {
+  __m__filter_by_name(q);
 }); // Change State 
 
 mainArea.on('map:state', function (e, value) {
