@@ -238,7 +238,7 @@ mainArea.on('map:not-found', () => {
     __m__build_list(offices);
 });
 
-// ============== Dom events ==============
+// ============== DOM triggers ==============
 mapSearch.on('keyup', e => mainArea.trigger('map:search', e.target.value));
 mapStates.on('change', e => mainArea.trigger('map:state', e.target.value));
 mapCities.on('change', e => mainArea.trigger('map:city', e.target.value));

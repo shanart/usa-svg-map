@@ -217,7 +217,7 @@ mainArea.on('map:city', function (e, value) {
 
 mainArea.on('map:not-found', function () {
   __m__build_list(offices);
-}); // ============== Dom events ==============
+}); // ============== DOM triggers ==============
 
 mapSearch.on('keyup', function (e) {
   return mainArea.trigger('map:search', e.target.value);
