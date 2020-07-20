@@ -1,1 +1,1 @@
-body,html{font-family:sans-serif;margin:0;padding:0}.container{max-width:1200px;margin:0 auto}.m-container{margin:50px 0}
+body,html{font-family:sans-serif;margin:0;padding:0}.container{max-width:1200px;margin:0 auto}.m-container{margin:50px 0}.m-top-filter{-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.m-table .m-thead,.m-top-filter{display:-webkit-box;display:-ms-flexbox;display:flex}.m-table .m-thead-th.city,.m-table .m-thead-th.name,.m-table .m-thead-th.phone,.m-table .m-thead-th.state,.m-table .m-thead-th.website{width:20%}

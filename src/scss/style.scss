@@ -13,3 +13,22 @@ body, html {
   margin: 50px 0;
 }
 
+.m-top-filter {
+  display: flex;
+  justify-content: space-between;
+}
+
+.m-table {
+
+  .m-thead {
+    display: flex;
+
+    &-th {
+      &.name    { width: 20% }
+      &.phone   { width: 20% }
+      &.website { width: 20% }
+      &.city    { width: 20% }
+      &.state   { width: 20% }
+    }
+  }
+}

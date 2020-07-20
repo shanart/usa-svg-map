@@ -1,3 +1,27 @@
+
+// Create map instance
+// var chart = am4core.create("chartdiv", am4maps.MapChart);
+// chart.seriesContainer.resizable = false;
+// chart.zoomControl = new am4maps.ZoomControl();
+// chart.chartContainer.wheelable = false;
+
+// // Set map definition
+// chart.geodata = am4geodata_usaLow;
+
+// // Set projection
+// chart.projection = new am4maps.projections.AlbersUsa();
+
+// // Create map polygon series
+// var polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
+// polygonSeries.useGeodata = true;
+
+// // Configure series
+// var polygonTemplate = polygonSeries.mapPolygons.template;
+// // polygonTemplate.tooltipText = "{name}";
+// polygonTemplate.fill = am4core.color("#DEE7F0");
+// polygonTemplate.stroke = am4core.color("#FFFFFF");
+// polygonTemplate.strokeWidth = 2;
+
 const offices = [
     {
         name: 'Acacio Fertility Center',
@@ -91,26 +115,16 @@ const offices = [
     }
 ];
 
-// Create map instance
-var chart = am4core.create("chartdiv", am4maps.MapChart);
-chart.seriesContainer.resizable = false;
-chart.zoomControl = new am4maps.ZoomControl();
-chart.chartContainer.wheelable = false;
+const mapArea = $('[data-m-area="map-area"]');
 
-// Set map definition
-chart.geodata = am4geodata_usaLow;
+function build_list(item) {
+    return '<div class="mo-item" data-location-lng="'+item.lng+'" data-location-lat="'+item.lat+'">' +
+    '    <div class="mo-item-cell name">'+item.name+'</div>'+
+    '    <div class="mo-item-cell phone">'+item.phone+'</div>'+
+    '    <div class="mo-item-cell website">'+item.website+'</div>'+
+    '    <div class="mo-item-cell city">'+item.city+'</div>'+
+    '    <div class="mo-item-cell state">'+item.state+'</div>'+
+    '</div>';
+}
 
-// Set projection
-chart.projection = new am4maps.projections.AlbersUsa();
-
-// Create map polygon series
-var polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
-polygonSeries.useGeodata = true;
-
-// Configure series
-var polygonTemplate = polygonSeries.mapPolygons.template;
-// polygonTemplate.tooltipText = "{name}";
-polygonTemplate.fill = am4core.color("#DEE7F0");
-polygonTemplate.stroke = am4core.color("#FFFFFF");
-polygonTemplate.strokeWidth = 2;
 

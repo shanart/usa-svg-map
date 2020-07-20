@@ -16,10 +16,48 @@
 
         <div class="m-container">
 
+            <div class="m-top-filter">
+                <div class="m-top-filter--search">
+                    <input type="text" name="m-search" class="m-filter-search" placeholder="Search">
+                </div>
+                <div class="m-top-filter--search">
+                    <select name="city" id="">
+                        <option value="los-angeles">Los Angeles</option>
+                        <option value="los-gatos">Los Gatos</option>
+                        <option value="lone-tree">Lone Tree</option>
+                    </select>
+                </div>
+                <div class="m-top-filter--search">
+                    <select name="state" id="">
+                        <option value="CA">CA</option>
+                        <option value="NY">NY</option>
+                        <option value="CZ">CZ</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="m-table">
+                <div class="m-thead">
+                    <div class="m-thead-th name">IVF Center</div>
+                    <div class="m-thead-th phone">Phone</div>
+                    <div class="m-thead-th website">Website</div>
+                    <div class="m-thead-th city">City</div>
+                    <div class="m-thead-th state">State</div>
+                </div>
+                <div class="m-tbody" data-m-area="map-area">
+                    <div class="mo-item">
+                        <div class="mo-item-cell name">Acacio Fertility Center</div>
+                        <div class="mo-item-cell phone">949-249-9200</div>
+                        <div class="mo-item-cell website">acaciofertility.com</div>
+                        <div class="mo-item-cell city">Laguna Niguel</div>
+                        <div class="mo-item-cell lat">33.5293205</div>
+                        <div class="mo-item-cell lng">-117.7413646</div>
+                        <div class="mo-item-cell state">'CA'</div>
+                    </div>
+                </div>
+            </div>
         </div>
-
     </div>
-
 
     <script src="./js/lib.js"></script>
     <script src="./js/main.js"></script>
