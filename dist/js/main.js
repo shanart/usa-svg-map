@@ -18,6 +18,7 @@
 // polygonTemplate.fill = am4core.color("#DEE7F0");
 // polygonTemplate.stroke = am4core.color("#FFFFFF");
 // polygonTemplate.strokeWidth = 2;
+var states = ['AL', 'AK', 'AS', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FM', 'FL', 'GA', 'GU', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MH', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'MP', 'OH', 'OK', 'OR', 'PW', 'PA', 'PR', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VI', 'VA', 'WA', 'WV', 'WI', 'WY'];
 var offices = [{
   name: 'Acacio Fertility Center',
   phone: '949-249-9200',
@@ -100,7 +101,43 @@ var offices = [{
   state: 'CA'
 }];
 var mapArea = $('[data-m-area="map-area"]');
+var mapStates = $('[data-m-area="states"]');
 
-function build_list(item) {
+function __m__build_item(item) {
   return '<div class="mo-item" data-location-lng="' + item.lng + '" data-location-lat="' + item.lat + '">' + '    <div class="mo-item-cell name">' + item.name + '</div>' + '    <div class="mo-item-cell phone">' + item.phone + '</div>' + '    <div class="mo-item-cell website">' + item.website + '</div>' + '    <div class="mo-item-cell city">' + item.city + '</div>' + '    <div class="mo-item-cell state">' + item.state + '</div>' + '</div>';
 }
+
+function __m__build_list(list) {
+  var output = '';
+  list.map(function (i) {
+    output += __m__build_item(i);
+  });
+  mapArea.html(output);
+}
+
+function __m__build_states(states) {
+  var output = '';
+  states.map(function (s) {
+    output += '<option value="' + s + '">' + s + '</option>';
+  });
+  mapStates.html(output);
+}
+
+function __m__collect_cities(offices) {
+  /*
+      let output = '';
+      states.map(s => {
+          output += '<option value="'+s+'">'+s+'</option>';
+      });
+      mapStates.html(output);
+  */
+} // build cities dropdown
+
+
+__m__collect_cities(); // build states dropdown
+
+
+__m__build_states(states); // starter list
+
+
+__m__build_list(offices);

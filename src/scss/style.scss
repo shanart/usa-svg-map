@@ -22,13 +22,18 @@ body, html {
 
   .m-thead {
     display: flex;
-
-    &-th {
-      &.name    { width: 20% }
-      &.phone   { width: 20% }
-      &.website { width: 20% }
-      &.city    { width: 20% }
-      &.state   { width: 20% }
-    }
   }
+}
+
+.mo-item {
+  display: flex;
+}
+
+.mo-item-cell,
+.m-thead-th {
+  &.name    { width: 20% }
+  &.phone   { width: 20% }
+  &.website { width: 20% }
+  &.city    { width: 20% }
+  &.state   { width: 20% }
 }
