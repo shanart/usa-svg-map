@@ -1,36 +1,31 @@
 "use strict";
 
-//
-var _carousel = $('[data-c-area="circle-carousel"]');
+/**
+ * ---------------------------------------
+ * This demo was created using amCharts 4.
+ *
+ * For more information visit:
+ * https://www.amcharts.com/
+ *
+ * Documentation is available at:
+ * https://www.amcharts.com/docs/v4/
+ * ---------------------------------------
+ */
+// Create map instance
+var chart = am4core.create("chartdiv", am4maps.MapChart);
+chart.seriesContainer.resizable = false;
+chart.zoomControl = new am4maps.ZoomControl();
+chart.chartContainer.wheelable = false; // Set map definition
 
-var _btn_next = $('[data-c-action="next"]');
+chart.geodata = am4geodata_usaLow; // Set projection
 
-var _btn_prev = $('[data-c-action="prev"]'); // copy items
+chart.projection = new am4maps.projections.AlbersUsa(); // Create map polygon series
 
+var polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
+polygonSeries.useGeodata = true; // Configure series
 
-_carousel.find('.__circle_item').clone().appendTo(_carousel); // reverse original
+var polygonTemplate = polygonSeries.mapPolygons.template; // polygonTemplate.tooltipText = "{name}";
 
-
-var _original_items = $($('[data-c-area="circle-carousel"] .__circle_item').get().reverse());
-
-_carousel.append(_original_items);
-
-_carousel.on('circle_slider:next', function () {
-  console.log('trigger next item'); // TODO: move next
-  // delete last item
-  // append to start of _carousel()
-});
-
-_carousel.on('circle_slider:prev', function () {
-  console.log('trigger prev item'); // TODO: move prev
-  // delete first item
-  // append to end of _carousel()
-});
-
-_btn_next.on('click', function () {
-  _carousel.trigger('circle_slider:next');
-});
-
-_btn_prev.on('click', function () {
-  _carousel.trigger('circle_slider:prev');
-});
+polygonTemplate.fill = am4core.color("#DEE7F0");
+polygonTemplate.stroke = am4core.color("#FFFFFF");
+polygonTemplate.strokeWidth = 2;

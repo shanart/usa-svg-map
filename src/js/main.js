@@ -1,45 +1,116 @@
+const offices = [
+    {
+        name: 'Acacio Fertility Center',
+        phone: '949-249-9200',
+        website: 'acaciofertility.com',
+        city: 'Laguna Niguel',
+        lat: 33.5293205,
+        lng: -117.7413646,
+        state: 'CA'
+    },
+    {
+        name: 'California Center for Reproductive Health',
+        phone: '310-550-1951',
+        website: 'center4reproduction.com',
+        city: 'West Hollywood',
+        lat: 33.5293205,
+        lng: -117.7413646,
+        state: 'CA'
+    },
+    {
+        name: 'California Fertility Partners',
+        phone: '310-828-4008',
+        website: 'californiafertilitypartners.com',
+        city: 'Los Angeles',
+        lat: 33.5293205,
+        lng: -117.7413646,
+        state: 'CA'
+    },
+    {
+        name: 'CARE for the Bay Area',
+        phone: '408-628-0783',
+        website: 'care4ba.com',
+        city: 'Los Gatos',
+        lat: 33.5293205,
+        lng: -117.7413646,
+        state: 'CA'
+    },
+    {
+        name: 'Huntington Reproductive Center (Encino)',
+        phone: '408-628-0783',
+        website: 'care4ba.com',
+        city: 'Los Gatos',
+        lat: 33.5293205,
+        lng: -117.7413646,
+        state: 'CA'
+    },
+    {
+        name: 'Huntington Reproductive Center (Fullerton)',
+        phone: '714-738-4200',
+        website: 'havingbabies.com',
+        city: 'Fullerton',
+        lat: 33.5293205,
+        lng: -117.7413646,
+        state: 'CA'
+    },
+    {
+        name: 'Huntington Reproductive Center (Newport Beach)',
+        phone: '949-287-5600',
+        website: 'havingbabies.com',
+        city: 'Newport Beach',
+        lat: 33.5293205,
+        lng: -117.7413646,
+        state: 'CA'
+    },
+    {
+        name: 'Lane Fertility Center',
+        phone: '415-893-0391',
+        website: 'lanefertilityinstitute.com',
+        city: 'San Francisco',
+        lat: 33.5293205,
+        lng: -117.7413646,
+        state: 'CA'
+    },
+    {
+        name: 'Newport Fertility Center',
+        phone: '949-222-1290',
+        website: 'newportfertility.com',
+        city: 'Newport Beach',
+        lat: 33.5293205,
+        lng: -117.7413646,
+        state: 'CA'
+    },
+    {
+        name: 'Northern California Fertility Medical Center',
+        phone: '916-773-2229',
+        website: 'ncfmc.com',
+        city: 'Roseville',
+        lat: 33.5293205,
+        lng: -117.7413646,
+        state: 'CA'
+    }
+];
 
-//
+// Create map instance
+var chart = am4core.create("chartdiv", am4maps.MapChart);
+chart.seriesContainer.resizable = false;
+chart.zoomControl = new am4maps.ZoomControl();
+chart.chartContainer.wheelable = false;
 
-const _carousel = $('[data-c-area="circle-carousel"]');
-const _btn_next = $('[data-c-action="next"]');
-const _btn_prev = $('[data-c-action="prev"]');
+// Set map definition
+chart.geodata = am4geodata_usaLow;
 
-// copy items
-_carousel.find('.__circle_item').clone().appendTo(_carousel);
+// Set projection
+chart.projection = new am4maps.projections.AlbersUsa();
 
-// reverse original
-const _original_items = $($('[data-c-area="circle-carousel"] .__circle_item').get().reverse());
-_carousel.append(_original_items);
+// Create map polygon series
+var polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
+polygonSeries.useGeodata = true;
 
-_carousel.on('circle_slider:next', function(){
-    console.log('trigger next item');
-    // TODO: move next
+// Configure series
+var polygonTemplate = polygonSeries.mapPolygons.template;
+// polygonTemplate.tooltipText = "{name}";
+polygonTemplate.fill = am4core.color("#DEE7F0");
+polygonTemplate.stroke = am4core.color("#FFFFFF");
+polygonTemplate.strokeWidth = 2;
 
-    // delete last item
-    // append to start of _carousel()
-});
-
-_carousel.on('circle_slider:prev', function(){
-    console.log('trigger prev item');
-    // TODO: move prev
-
-    // delete first item
-    // append to end of _carousel()
-});
-
-
-
-
-
-
-
-
-
-_btn_next.on('click', function(){
-    _carousel.trigger('circle_slider:next');
-});
-
-_btn_prev.on('click', function(){
-    _carousel.trigger('circle_slider:prev');
-})

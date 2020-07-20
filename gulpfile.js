@@ -34,6 +34,9 @@ var paths = {
 function js_libs() {
     return gulp.src([
             'node_modules/jquery/dist/jquery.min.js',
+            './src/js_libs/core.js',
+            './src/js_libs/maps.js',
+            './src/js_libs/usaLow.js'
         ])
         .pipe(concat('lib.js'))
         .pipe(gulp.dest(paths.js.dest));

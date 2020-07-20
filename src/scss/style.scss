@@ -4,10 +4,12 @@ body, html {
     padding: 0;
 }
 
-
-
-.cicle-carousel {
-  .__circle_item {
-
-  }
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
 }
+
+.m-container {
+  margin: 50px 0;
+}
+
