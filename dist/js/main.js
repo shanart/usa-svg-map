@@ -181,7 +181,6 @@ __m__build_list(offices); // ============== Filter functions ==============
 
 
 function __m__filter_by_name(q) {
-  // build_list(data_diseases.filter(item => item.title.toLowerCase().startsWith(q.toLowerCase())));
   var r = offices.filter(function (o) {
     return o.name.toLowerCase().includes(q.toLowerCase());
   });
