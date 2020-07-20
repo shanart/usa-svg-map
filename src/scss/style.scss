@@ -22,6 +22,7 @@ body, html {
 
   .m-thead {
     display: flex;
+    font-weight: bold;
   }
 }
 
@@ -31,9 +32,9 @@ body, html {
 
 .mo-item-cell,
 .m-thead-th {
-  &.name    { width: 20% }
-  &.phone   { width: 20% }
-  &.website { width: 20% }
-  &.city    { width: 20% }
-  &.state   { width: 20% }
+  &.name    { width: 42% }
+  &.phone   { width: 14% }
+  &.website { width: 25% }
+  &.city    { width: 13% }
+  &.state   { width:  6% }
 }

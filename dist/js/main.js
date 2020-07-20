@@ -87,7 +87,7 @@ var offices = [{
   name: 'Newport Fertility Center',
   phone: '949-222-1290',
   website: 'newportfertility.com',
-  city: 'Newport Beach',
+  city: 'Roseville',
   lat: 33.5293205,
   lng: -117.7413646,
   state: 'CA'
@@ -102,9 +102,12 @@ var offices = [{
 }];
 var mapArea = $('[data-m-area="map-area"]');
 var mapStates = $('[data-m-area="states"]');
+var mapCities = $('[data-m-area="cities"]');
+var mapSearch = $('[data-m-area="search"]');
+var mainArea = $('[data-m-area="main"]');
 
 function __m__build_item(item) {
-  return '<div class="mo-item" data-location-lng="' + item.lng + '" data-location-lat="' + item.lat + '">' + '    <div class="mo-item-cell name">' + item.name + '</div>' + '    <div class="mo-item-cell phone">' + item.phone + '</div>' + '    <div class="mo-item-cell website">' + item.website + '</div>' + '    <div class="mo-item-cell city">' + item.city + '</div>' + '    <div class="mo-item-cell state">' + item.state + '</div>' + '</div>';
+  return '<div class="mo-item" data-location-lng="' + item.lng + '" data-location-lat="' + item.lat + '">' + '    <div class="mo-item-cell name">' + item.name + '</div>' + '    <div class="mo-item-cell phone"><a href="tel:' + item.phone + '">' + item.phone + '</a></div>' + '    <div class="mo-item-cell website"><a href="https://' + item.website + '">' + item.website + '</a></div>' + '    <div class="mo-item-cell city">' + item.city + '</div>' + '    <div class="mo-item-cell state">' + item.state + '</div></div>';
 }
 
 function __m__build_list(list) {
@@ -118,19 +121,21 @@ function __m__build_list(list) {
 function __m__build_states(states) {
   var output = '';
   states.map(function (s) {
-    output += '<option value="' + s + '">' + s + '</option>';
+    return output += '<option value="' + s + '">' + s + '</option>';
   });
   mapStates.html(output);
 }
 
-function __m__collect_cities(offices) {
-  /*
-      let output = '';
-      states.map(s => {
-          output += '<option value="'+s+'">'+s+'</option>';
-      });
-      mapStates.html(output);
-  */
+function __m__collect_cities() {
+  var cities = [],
+      output = '';
+  offices.map(function (o) {
+    return !cities.includes(o.city) ? cities.push(o.city) : null;
+  });
+  cities.map(function (c) {
+    return output += '<option value="' + c + '">' + c + '</option>';
+  });
+  mapCities.html(output);
 } // build cities dropdown
 
 
@@ -140,4 +145,28 @@ __m__collect_cities(); // build states dropdown
 __m__build_states(states); // starter list
 
 
-__m__build_list(offices);
+__m__build_list(offices); // ============== Filter events ==============
+// Search input
+
+
+mainArea.on('map:search', function (e, value) {
+  console.log(value);
+}); // Change State 
+
+mainArea.on('map:state', function (e, value) {
+  console.log('State', value);
+}); // Change City
+
+mainArea.on('map:city', function (e, value) {
+  console.log('City', value);
+}); // ============== Dom events ==============
+
+mapSearch.on('keyup', function (e) {
+  return mainArea.trigger('map:search', e.target.value);
+});
+mapStates.on('change', function (e) {
+  return mainArea.trigger('map:state', e.target.value);
+});
+mapCities.on('change', function (e) {
+  return mainArea.trigger('map:city', e.target.value);
+});

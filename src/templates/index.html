@@ -11,24 +11,20 @@
 </head>
 <body>
     
-    <div class="container">
+    <div class="container" data-m-area="main">
         <div id="chartdiv"></div>
 
         <div class="m-container">
 
             <div class="m-top-filter">
                 <div class="m-top-filter--search">
-                    <input type="text" name="m-search" class="m-filter-search" placeholder="Search">
+                    <input type="text" data-m-area="search" name="m-search" class="m-filter-search" placeholder="Search">
                 </div>
                 <div class="m-top-filter--search">
-                    <select name="city" id="">
-                        <option value="los-angeles">Los Angeles</option>
-                        <option value="los-gatos">Los Gatos</option>
-                        <option value="lone-tree">Lone Tree</option>
-                    </select>
+                    <select name="city" data-m-area="cities"></select>
                 </div>
                 <div class="m-top-filter--search">
-                    <select name="state" id="" data-m-area="states"></select>
+                    <select name="state" data-m-area="states"></select>
                 </div>
             </div>
 

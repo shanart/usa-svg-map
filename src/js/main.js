@@ -21,7 +21,12 @@
 // polygonTemplate.fill = am4core.color("#DEE7F0");
 // polygonTemplate.stroke = am4core.color("#FFFFFF");
 // polygonTemplate.strokeWidth = 2;
-const states = ['AL','AK','AS','AZ','AR','CA','CO','CT','DE','DC','FM','FL','GA','GU','HI','ID','IL','IN','IA','KS','KY','LA','ME','MH','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','MP','OH','OK','OR','PW','PA','PR','RI','SC','SD','TN','TX','UT','VT','VI','VA','WA','WV','WI','WY'];
+
+const states = ['AL', 'AK', 'AS', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FM', 'FL', 'GA', 'GU', 'HI', 'ID', 'IL',
+                'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MH', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH',
+                'NJ', 'NM', 'NY', 'NC', 'ND', 'MP', 'OH', 'OK', 'OR', 'PW', 'PA', 'PR', 'RI', 'SC', 'SD', 'TN', 'TX',
+                'UT', 'VT', 'VI', 'VA', 'WA', 'WV', 'WI', 'WY'];
+
 const offices = [
     {
         name: 'Acacio Fertility Center',
@@ -99,7 +104,7 @@ const offices = [
         name: 'Newport Fertility Center',
         phone: '949-222-1290',
         website: 'newportfertility.com',
-        city: 'Newport Beach',
+        city: 'Roseville',
         lat: 33.5293205,
         lng: -117.7413646,
         state: 'CA'
@@ -117,14 +122,17 @@ const offices = [
 
 const mapArea = $('[data-m-area="map-area"]');
 const mapStates = $('[data-m-area="states"]');
+const mapCities = $('[data-m-area="cities"]');
+const mapSearch = $('[data-m-area="search"]');
+const mainArea = $('[data-m-area="main"]');
+
 function __m__build_item(item) {
     return '<div class="mo-item" data-location-lng="'+item.lng+'" data-location-lat="'+item.lat+'">' +
-    '    <div class="mo-item-cell name">'+item.name+'</div>'+
-    '    <div class="mo-item-cell phone">'+item.phone+'</div>'+
-    '    <div class="mo-item-cell website">'+item.website+'</div>'+
-    '    <div class="mo-item-cell city">'+item.city+'</div>'+
-    '    <div class="mo-item-cell state">'+item.state+'</div>'+
-    '</div>';
+    '    <div class="mo-item-cell name">'+item.name+'</div>' +
+    '    <div class="mo-item-cell phone"><a href="tel:'+item.phone+'">'+item.phone+'</a></div>' +
+    '    <div class="mo-item-cell website"><a href="https://'+item.website+'">'+item.website+'</a></div>' +
+    '    <div class="mo-item-cell city">'+item.city+'</div>' +
+    '    <div class="mo-item-cell state">'+item.state+'</div></div>';
 }
 
 function __m__build_list(list) {
@@ -137,23 +145,15 @@ function __m__build_list(list) {
 
 function __m__build_states(states) {
     let output = '';
-    states.map(s => {
-        output += '<option value="'+s+'">'+s+'</option>';
-    });
+    states.map(s => output += '<option value="' + s + '">' + s + '</option>');
     mapStates.html(output);
 }
 
-function __m__collect_cities(offices) {
-
-    
-
-    /*
-        let output = '';
-        states.map(s => {
-            output += '<option value="'+s+'">'+s+'</option>';
-        });
-        mapStates.html(output);
-    */
+function __m__collect_cities() {
+    let cities = [], output = '';
+    offices.map(o => !cities.includes(o.city) ? cities.push(o.city) : null );
+    cities.map(c => output += '<option value="'+c+'">'+c+'</option>');
+    mapCities.html(output);
 }
 
 // build cities dropdown
@@ -164,3 +164,26 @@ __m__build_states(states);
 
 // starter list
 __m__build_list(offices);
+
+
+// ============== Filter events ==============
+// Search input
+mainArea.on('map:search', (e, value) => {
+    console.log(value);
+});
+
+// Change State 
+mainArea.on('map:state', (e, value) => {
+    console.log('State', value);
+});
+
+// Change City
+mainArea.on('map:city', (e, value) => {
+    console.log('City', value);
+});
+
+
+// ============== Dom events ==============
+mapSearch.on('keyup', e => mainArea.trigger('map:search', e.target.value));
+mapStates.on('change', e => mainArea.trigger('map:state', e.target.value));
+mapCities.on('change', e => mainArea.trigger('map:city', e.target.value));
