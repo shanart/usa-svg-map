@@ -1,5 +1,50 @@
+// DOM constants
+const mapArea = $('[data-m-area="map-area"]');
+const mapStates = $('[data-m-area="states"]');
+const mapCities = $('[data-m-area="cities"]');
+const mapSearch = $('[data-m-area="search"]');
+const mainArea = $('[data-m-area="main"]');
 
-// Create map instance
+// ============== Helpers ==============
+// Slugify a string
+function slugify(str) {
+    str = str.replace(/^\s+|\s+$/g, '');
+
+    // Make the string lowercase
+    str = str.toLowerCase();
+
+    // Remove accents, swap ñ for n, etc
+    var from = "ÁÄÂÀÃÅČÇĆĎÉĚËÈÊẼĔȆÍÌÎÏŇÑÓÖÒÔÕØŘŔŠŤÚŮÜÙÛÝŸŽáäâàãåčçćďéěëèêẽĕȇíìîïňñóöòôõøðřŕšťúůüùûýÿžþÞĐđßÆa·/_,:;";
+    var to = "AAAAAACCCDEEEEEEEEIIIINNOOOOOORRSTUUUUUYYZaaaaaacccdeeeeeeeeiiiinnooooooorrstuuuuuyyzbBDdBAa------";
+    for (var i = 0, l = from.length; i < l; i++) {
+        str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+    }
+
+    // Remove invalid chars
+    str = str.replace(/[^a-z0-9 -]/g, '')
+        // Collapse whitespace and replace by -
+        .replace(/\s+/g, '-')
+        // Collapse dashes
+        .replace(/-+/g, '-');
+
+    return str;
+}
+if (!String.prototype.startsWith) {
+    Object.defineProperty(String.prototype, 'startsWith', {
+        value: function (search, rawPos) {
+            var pos = rawPos > 0 ? rawPos | 0 : 0;
+            return this.substring(pos, pos + search.length) === search;
+        }
+    });
+}
+
+// ============== Data ==============
+const states = ['AL', 'AK', 'AS', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FM', 'FL', 'GA', 'GU', 'HI', 'ID', 'IL',
+    'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MH', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH',
+    'NJ', 'NM', 'NY', 'NC', 'ND', 'MP', 'OH', 'OK', 'OR', 'PW', 'PA', 'PR', 'RI', 'SC', 'SD', 'TN', 'TX',
+    'UT', 'VT', 'VI', 'VA', 'WA', 'WV', 'WI', 'WY'];
+
+// ============== init map ==============
 var chart = am4core.create("chartdiv", am4maps.MapChart);
 chart.seriesContainer.resizable = false;
 chart.zoomControl = new am4maps.ZoomControl();
@@ -22,7 +67,34 @@ polygonTemplate.fill = am4core.color("#DEE7F0");
 polygonTemplate.stroke = am4core.color("#FFFFFF");
 polygonTemplate.strokeWidth = 2;
 
-// load data
+var polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
+polygonSeries.exclude = ["AQ"];
+polygonSeries.useGeodata = true;
+
+var polygonTemplate = polygonSeries.mapPolygons.template;
+polygonTemplate.polygon.fillOpacity = 0;
+
+var aquaSeries = chart.series.push(new am4maps.MapImageSeries());
+aquaSeries.mapImages.template.propertyFields.longitude = "longitude";
+aquaSeries.mapImages.template.propertyFields.latitude = "latitude";
+aquaSeries.mapImages.template.propertyFields.blank = "blank";
+aquaSeries.mapImages.template.propertyFields.id = "id";
+
+var marker = aquaSeries.mapImages.template.createChild(am4core.Image);
+marker.href = "pin.svg";
+marker.propertyFields.href = "icon";
+marker.width = 11;
+marker.height = 11;
+marker.nonScaling = true;
+marker.horizontalCenter = "middle";
+marker.verticalCenter = "middle";
+
+aquaSeries.mapImages.template.events.on('hit', function (ev) {
+    console.log(ev.target);
+    mainArea.trigger('map:hit', ev.target);
+}, this);
+
+var colorSet = new am4core.ColorSet();
 aquaSeries.data = [
     {
         "id": 287,
@@ -30,54 +102,27 @@ aquaSeries.data = [
         "title": "Acuario de Sevilla",
         "country": "Spain",
         "date": "June, 2020",
-        "image": "image url",
+        "image": "pin.svg",
         "url": "website url",
-        "icon": "icon svg", 
-        "latitude": 37.38909240, 
-        "longitude": -5.98445889, 
-        "color": "#25d8c0" 
+        "icon": "pin.svg",
+        "latitude": 33.557596,
+        "longitude": -117.6778945,
+        "color": "#25d8c0"
+    },
+    {
+        "id": 288,
+        "blank": null,
+        "title": "New York",
+        "country": "Spain",
+        "date": "June, 2020",
+        "image": "pin.svg",
+        "url": "website url",
+        "icon": "pin.svg",
+        "latitude": 40.7166625,
+        "longitude": -74.0548753,
+        "color": "#25d8c0"
     }
 ];
-
-// ============== Helpers ==============
-// Slugify a string
-function slugify(str)
-{
-    str = str.replace(/^\s+|\s+$/g, '');
-
-    // Make the string lowercase
-    str = str.toLowerCase();
-
-    // Remove accents, swap ñ for n, etc
-    var from = "ÁÄÂÀÃÅČÇĆĎÉĚËÈÊẼĔȆÍÌÎÏŇÑÓÖÒÔÕØŘŔŠŤÚŮÜÙÛÝŸŽáäâàãåčçćďéěëèêẽĕȇíìîïňñóöòôõøðřŕšťúůüùûýÿžþÞĐđßÆa·/_,:;";
-    var to   = "AAAAAACCCDEEEEEEEEIIIINNOOOOOORRSTUUUUUYYZaaaaaacccdeeeeeeeeiiiinnooooooorrstuuuuuyyzbBDdBAa------";
-    for (var i=0, l=from.length ; i<l ; i++) {
-        str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
-    }
-
-    // Remove invalid chars
-    str = str.replace(/[^a-z0-9 -]/g, '') 
-    // Collapse whitespace and replace by -
-    .replace(/\s+/g, '-') 
-    // Collapse dashes
-    .replace(/-+/g, '-'); 
-
-    return str;
-}
-if (!String.prototype.startsWith) {
-    Object.defineProperty(String.prototype, 'startsWith', {
-        value: function (search, rawPos) {
-        var pos = rawPos > 0 ? rawPos | 0 : 0;
-        return this.substring(pos, pos + search.length) === search;
-        }
-    });
-}
-
-// ============== Data ==============
-const states = ['AL', 'AK', 'AS', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FM', 'FL', 'GA', 'GU', 'HI', 'ID', 'IL',
-                'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MH', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH',
-                'NJ', 'NM', 'NY', 'NC', 'ND', 'MP', 'OH', 'OK', 'OR', 'PW', 'PA', 'PR', 'RI', 'SC', 'SD', 'TN', 'TX',
-                'UT', 'VT', 'VI', 'VA', 'WA', 'WV', 'WI', 'WY'];
 
 const offices = [
     {
@@ -172,20 +217,15 @@ const offices = [
     }
 ];
 
-const mapArea = $('[data-m-area="map-area"]');
-const mapStates = $('[data-m-area="states"]');
-const mapCities = $('[data-m-area="cities"]');
-const mapSearch = $('[data-m-area="search"]');
-const mainArea = $('[data-m-area="main"]');
 
 // ============== DOM builders ==============
 function __m__build_item(item) {
     return '<div class="mo-item">' +
-    '    <div class="mo-item-cell name">'+item.name+'</div>' +
-    '    <div class="mo-item-cell phone"><a href="tel:'+item.phone+'">'+item.phone+'</a></div>' +
-    '    <div class="mo-item-cell website"><a href="https://'+item.website+'">'+item.website+'</a></div>' +
-    '    <div class="mo-item-cell city">'+item.city+'</div>' +
-    '    <div class="mo-item-cell state">'+item.state+'</div></div>';
+        '    <div class="mo-item-cell name">' + item.name + '</div>' +
+        '    <div class="mo-item-cell phone"><a href="tel:' + item.phone + '">' + item.phone + '</a></div>' +
+        '    <div class="mo-item-cell website"><a href="https://' + item.website + '">' + item.website + '</a></div>' +
+        '    <div class="mo-item-cell city">' + item.city + '</div>' +
+        '    <div class="mo-item-cell state">' + item.state + '</div></div>';
 }
 
 function __m__build_list(list) {
@@ -204,8 +244,8 @@ function __m__build_states(states) {
 
 function __m__collect_cities() {
     let cities = [], output = '';
-    offices.map(o => !cities.includes(o.city) ? cities.push(o.city) : null );
-    cities.map(c => output += '<option value="'+c+'">'+c+'</option>');
+    offices.map(o => !cities.includes(o.city) ? cities.push(o.city) : null);
+    cities.map(c => output += '<option value="' + c + '">' + c + '</option>');
     mapCities.html(output);
 }
 
@@ -252,6 +292,11 @@ mainArea.on('map:city', (e, value) => {
 // no filter/search result
 mainArea.on('map:not-found', () => {
     __m__build_list(offices);
+});
+
+// hit on map
+mainArea.on('map:hit', data => {
+    console.log(data);
 });
 
 // ============== DOM triggers ==============

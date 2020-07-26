@@ -1,23 +1,11 @@
 "use strict";
 
-// Create map instance
-var chart = am4core.create("chartdiv", am4maps.MapChart);
-chart.seriesContainer.resizable = false;
-chart.zoomControl = new am4maps.ZoomControl();
-chart.chartContainer.wheelable = false; // // Set map definition
-
-chart.geodata = am4geodata_usaLow; // // Set projection
-
-chart.projection = new am4maps.projections.AlbersUsa(); // // Create map polygon series
-
-var polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
-polygonSeries.useGeodata = true; // // Configure series
-
-var polygonTemplate = polygonSeries.mapPolygons.template; // // polygonTemplate.tooltipText = "{name}";
-
-polygonTemplate.fill = am4core.color("#DEE7F0");
-polygonTemplate.stroke = am4core.color("#FFFFFF");
-polygonTemplate.strokeWidth = 2; // ============== Helpers ==============
+// DOM constants
+var mapArea = $('[data-m-area="map-area"]');
+var mapStates = $('[data-m-area="states"]');
+var mapCities = $('[data-m-area="cities"]');
+var mapSearch = $('[data-m-area="search"]');
+var mainArea = $('[data-m-area="main"]'); // ============== Helpers ==============
 // Slugify a string
 
 function slugify(str) {
@@ -49,7 +37,73 @@ if (!String.prototype.startsWith) {
 } // ============== Data ==============
 
 
-var states = ['AL', 'AK', 'AS', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FM', 'FL', 'GA', 'GU', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MH', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'MP', 'OH', 'OK', 'OR', 'PW', 'PA', 'PR', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VI', 'VA', 'WA', 'WV', 'WI', 'WY'];
+var states = ['AL', 'AK', 'AS', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FM', 'FL', 'GA', 'GU', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MH', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'MP', 'OH', 'OK', 'OR', 'PW', 'PA', 'PR', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VI', 'VA', 'WA', 'WV', 'WI', 'WY']; // ============== init map ==============
+
+var chart = am4core.create("chartdiv", am4maps.MapChart);
+chart.seriesContainer.resizable = false;
+chart.zoomControl = new am4maps.ZoomControl();
+chart.chartContainer.wheelable = false; // // Set map definition
+
+chart.geodata = am4geodata_usaLow; // // Set projection
+
+chart.projection = new am4maps.projections.AlbersUsa(); // // Create map polygon series
+
+var polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
+polygonSeries.useGeodata = true; // // Configure series
+
+var polygonTemplate = polygonSeries.mapPolygons.template; // // polygonTemplate.tooltipText = "{name}";
+
+polygonTemplate.fill = am4core.color("#DEE7F0");
+polygonTemplate.stroke = am4core.color("#FFFFFF");
+polygonTemplate.strokeWidth = 2;
+var polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
+polygonSeries.exclude = ["AQ"];
+polygonSeries.useGeodata = true;
+var polygonTemplate = polygonSeries.mapPolygons.template;
+polygonTemplate.polygon.fillOpacity = 0;
+var aquaSeries = chart.series.push(new am4maps.MapImageSeries());
+aquaSeries.mapImages.template.propertyFields.longitude = "longitude";
+aquaSeries.mapImages.template.propertyFields.latitude = "latitude";
+aquaSeries.mapImages.template.propertyFields.blank = "blank";
+aquaSeries.mapImages.template.propertyFields.id = "id";
+var marker = aquaSeries.mapImages.template.createChild(am4core.Image);
+marker.href = "pin.svg";
+marker.propertyFields.href = "icon";
+marker.width = 11;
+marker.height = 11;
+marker.nonScaling = true;
+marker.horizontalCenter = "middle";
+marker.verticalCenter = "middle";
+aquaSeries.mapImages.template.events.on('hit', function (ev) {
+  console.log(ev.target);
+  mainArea.trigger('map:hit', ev.target);
+}, void 0);
+var colorSet = new am4core.ColorSet();
+aquaSeries.data = [{
+  "id": 287,
+  "blank": null,
+  "title": "Acuario de Sevilla",
+  "country": "Spain",
+  "date": "June, 2020",
+  "image": "pin.svg",
+  "url": "website url",
+  "icon": "pin.svg",
+  "latitude": 33.557596,
+  "longitude": -117.6778945,
+  "color": "#25d8c0"
+}, {
+  "id": 288,
+  "blank": null,
+  "title": "New York",
+  "country": "Spain",
+  "date": "June, 2020",
+  "image": "pin.svg",
+  "url": "website url",
+  "icon": "pin.svg",
+  "latitude": 40.7166625,
+  "longitude": -74.0548753,
+  "color": "#25d8c0"
+}];
 var offices = [{
   name: 'Acacio Fertility Center',
   phone: '949-249-9200',
@@ -130,12 +184,7 @@ var offices = [{
   lat: 33.5293205,
   lng: -117.7413646,
   state: 'CA'
-}];
-var mapArea = $('[data-m-area="map-area"]');
-var mapStates = $('[data-m-area="states"]');
-var mapCities = $('[data-m-area="cities"]');
-var mapSearch = $('[data-m-area="search"]');
-var mainArea = $('[data-m-area="main"]'); // ============== DOM builders ==============
+}]; // ============== DOM builders ==============
 
 function __m__build_item(item) {
   return '<div class="mo-item">' + '    <div class="mo-item-cell name">' + item.name + '</div>' + '    <div class="mo-item-cell phone"><a href="tel:' + item.phone + '">' + item.phone + '</a></div>' + '    <div class="mo-item-cell website"><a href="https://' + item.website + '">' + item.website + '</a></div>' + '    <div class="mo-item-cell city">' + item.city + '</div>' + '    <div class="mo-item-cell state">' + item.state + '</div></div>';
@@ -217,6 +266,10 @@ mainArea.on('map:city', function (e, value) {
 
 mainArea.on('map:not-found', function () {
   __m__build_list(offices);
+}); // hit on map
+
+mainArea.on('map:hit', function (data) {
+  console.log(data);
 }); // ============== DOM triggers ==============
 
 mapSearch.on('keyup', function (e) {
