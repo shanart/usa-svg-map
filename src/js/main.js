@@ -22,6 +22,22 @@ polygonTemplate.fill = am4core.color("#DEE7F0");
 polygonTemplate.stroke = am4core.color("#FFFFFF");
 polygonTemplate.strokeWidth = 2;
 
+// load data
+aquaSeries.data = [
+    {
+        "id": 287,
+        "blank": null,
+        "title": "Acuario de Sevilla",
+        "country": "Spain",
+        "date": "June, 2020",
+        "image": "image url",
+        "url": "website url",
+        "icon": "icon svg", 
+        "latitude": 37.38909240, 
+        "longitude": -5.98445889, 
+        "color": "#25d8c0" 
+    }
+];
 
 // ============== Helpers ==============
 // Slugify a string
