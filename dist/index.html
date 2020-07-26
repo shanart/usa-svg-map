@@ -6,16 +6,36 @@
     <title>Map filter</title>
 
     <link rel="stylesheet" href="./css/style.css">
-    <link rel="icon" type="image/svg+xml" href="./logo.svg">
+    <link rel="icon" type="image/svg+xml" href="./img/logo.svg">
 
 </head>
 <body>
     
     <div class="container" data-m-area="main">
         <div class="m-container">
-            
             <div id="chartdiv"></div>
-
+            <div class="m-data-modal">
+                <button class="m-data-modal--close" type="button" data-m-modal-close></button>
+                <div class="m-data-modal--title">California Fertility Partners</div>
+                <div class="m-data-modal--info">
+                    <div class="m-data-modal--label">Phone</div>
+                    <div class="m-data-modal--paragraph" data-m-modal-phone>310-828-4008</div>
+                </div>
+                <div class="m-data-modal--info">
+                    <div class="m-data-modal--label">Website</div>
+                    <div class="m-data-modal--paragraph" data-m-modal-website>
+                        <a href="mailto:californiafertilitypartners.com">californiafertilitypartners.com</a>
+                    </div>
+                </div>
+                <div class="m-data-modal--info">
+                    <div class="m-data-modal--label">City</div>
+                    <div class="m-data-modal--paragraph" data-m-modal-city>Los Angeles</div>
+                </div>
+                <div class="m-data-modal--info">
+                    <div class="m-data-modal--label">State</div>
+                    <div class="m-data-modal--paragraph" data-m-modal-state>CA</div>
+                </div>
+            </div>
             <div class="m-top-filter">
                 <div class="m-top-filter--search">
                     <input type="text" data-m-area="search" name="m-search" class="m-filter-search" placeholder="Search IVF Center">

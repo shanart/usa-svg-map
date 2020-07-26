@@ -1,4 +1,26 @@
 const offices = [
+    {
+        id: 287,
+        name: 'Acacio Fertility Center',
+        phone: '949-249-9200',
+        website: 'acaciofertility.com',
+        city: 'Laguna Niguel',
+        latitude: 33.557596,
+        longitude: -117.6778945,
+        state: 'AK',
+        icon: "./img/pin_blue.svg"
+    },
+    {
+        id: 288,
+        name: 'Acacio Fertility Center',
+        phone: '949-249-9200',
+        website: 'acaciofertility.com',
+        city: 'Laguna Niguel',
+        latitude: 40.7166625,
+        longitude: -74.0548753,
+        state: 'AK',
+        icon: "./img/pin_blue.svg"
+    },
     {   
         id: 1,
         name: 'Acacio Fertility Center',
@@ -7,7 +29,8 @@ const offices = [
         city: 'Laguna Niguel',
         latitude: 32.5293205,
         longitude: -116.7413646,
-        state: 'AK'
+        state: 'AK',
+        icon: "./img/pin_blue.svg",
     },
     {   
         id: 2,
@@ -15,9 +38,10 @@ const offices = [
         phone: '310-550-1951',
         website: 'center4reproduction.com',
         city: 'West Hollywood',
-        latitude: 30.5293205,
-        longitude: -115.7413646,
-        state: 'CA'
+        latitude: 40.718484,
+        longitude: -74.0548753,
+        state: 'CA',
+        icon: "./img/pin_blue.svg"
     },
     {   
         id: 3,
@@ -37,7 +61,8 @@ const offices = [
         city: 'Los Gatos',
         latitude: 28.5293205,
         longitude: -113.7413646,
-        state: 'CA'
+        state: 'CA',
+        icon: "./img/pin_blue.svg"
     },
     {   
         id: 5,
@@ -47,7 +72,8 @@ const offices = [
         city: 'Los Gatos',
         latitude: 34.5293205,
         longitude: -112.7413646,
-        state: 'CA'
+        state: 'CA',
+        icon: "./img/pin_blue.svg"
     },
     {   
         id: 6,
@@ -57,7 +83,8 @@ const offices = [
         city: 'Fullerton',
         latitude: 35.5293205,
         longitude: -111.7413646,
-        state: 'CA'
+        state: 'CA',
+        icon: "./img/pin_blue.svg"
     },
     {   
         id: 7,
@@ -67,7 +94,8 @@ const offices = [
         city: 'Newport Beach',
         latitude: 36.5293205,
         longitude: -110.7413646,
-        state: 'CA'
+        state: 'CA',
+        icon: "./img/pin_blue.svg"
     },
     {   
         id: 8,
@@ -77,7 +105,8 @@ const offices = [
         city: 'San Francisco',
         latitude: 39.5293205,
         longitude: -117.7413646,
-        state: 'CA'
+        state: 'CA',
+        icon: "./img/pin_blue.svg"
     },
     {   
         id: 9,
@@ -87,7 +116,8 @@ const offices = [
         city: 'Roseville',
         latitude: 37.5293205,
         longitude: -118.7413646,
-        state: 'CA'
+        state: 'CA',
+        icon: "./img/pin_blue.svg"
     },
     {   
         id: 10,
@@ -97,10 +127,10 @@ const offices = [
         city: 'Roseville',
         latitude: 40.5293205,
         longitude: -107.7413646,
-        state: 'CA'
+        state: 'CA',
+        icon: "./img/pin_blue.svg"
     }
 ];
-
 
 // DOM constants
 const mapArea = $('[data-m-area="map-area"]');
@@ -108,8 +138,10 @@ const mapStates = $('[data-m-area="states"]');
 const mapCities = $('[data-m-area="cities"]');
 const mapSearch = $('[data-m-area="search"]');
 const mainArea = $('[data-m-area="main"]');
+const closeModal = $('[data-m-modal-close]');
 
 // ============== Helpers ==============
+
 // Slugify a string
 function slugify(str) {
     str = str.replace(/^\s+|\s+$/g, '');
@@ -194,11 +226,7 @@ marker.horizontalCenter = "middle";
 marker.verticalCenter = "middle";
 
 aquaSeries.mapImages.template.events.on('hit', function (ev) {
-    const data = {
-        t: ev.target.id,
-        p: ev.point
-    };
-    mainArea.trigger('map:hit', data);
+    mainArea.trigger('map:hit', { id: ev.target.id, point: ev.point });
 }, this);
 
 var colorSet = new am4core.ColorSet();
@@ -223,6 +251,11 @@ mainArea.on('map:city', (e, value) => {
 // no filter/search result
 mainArea.on('map:not-found', () => {
     __m__build_list();
+});
+
+mainArea.on('map:close-modal', () => {
+    // __m__build_list();
+    console.log('close modal');
 });
 
 // hit on map
@@ -293,3 +326,4 @@ function __m__filter_by_city(q) {
 mapSearch.on('keyup', e => mainArea.trigger('map:search', e.target.value));
 mapStates.on('change', e => mainArea.trigger('map:state', e.target.value));
 mapCities.on('change', e => mainArea.trigger('map:city', e.target.value));
+closeModal.on('click', () => mainArea.trigger('map:close-modal'));
