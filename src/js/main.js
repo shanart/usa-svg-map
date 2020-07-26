@@ -1,3 +1,107 @@
+const offices = [
+    {   
+        id: 1,
+        name: 'Acacio Fertility Center',
+        phone: '949-249-9200',
+        website: 'acaciofertility.com',
+        city: 'Laguna Niguel',
+        latitude: 32.5293205,
+        longitude: -116.7413646,
+        state: 'AK'
+    },
+    {   
+        id: 2,
+        name: 'California Center for Reproductive Health',
+        phone: '310-550-1951',
+        website: 'center4reproduction.com',
+        city: 'West Hollywood',
+        latitude: 30.5293205,
+        longitude: -115.7413646,
+        state: 'CA'
+    },
+    {   
+        id: 3,
+        name: 'California Fertility Partners',
+        phone: '310-828-4008',
+        website: 'californiafertilitypartners.com',
+        city: 'Los Angeles',
+        latitude: 29.5293205,
+        longitude: -114.7413646,
+        state: 'CA'
+    },
+    {   
+        id: 4,
+        name: 'CARE for the Bay Area',
+        phone: '408-628-0783',
+        website: 'care4ba.com',
+        city: 'Los Gatos',
+        latitude: 28.5293205,
+        longitude: -113.7413646,
+        state: 'CA'
+    },
+    {   
+        id: 5,
+        name: 'Huntington Reproductive Center (Encino)',
+        phone: '408-628-0783',
+        website: 'care4ba.com',
+        city: 'Los Gatos',
+        latitude: 34.5293205,
+        longitude: -112.7413646,
+        state: 'CA'
+    },
+    {   
+        id: 6,
+        name: 'Huntington Reproductive Center (Fullerton)',
+        phone: '714-738-4200',
+        website: 'havingbabies.com',
+        city: 'Fullerton',
+        latitude: 35.5293205,
+        longitude: -111.7413646,
+        state: 'CA'
+    },
+    {   
+        id: 7,
+        name: 'Huntington Reproductive Center (Newport Beach)',
+        phone: '949-287-5600',
+        website: 'havingbabies.com',
+        city: 'Newport Beach',
+        latitude: 36.5293205,
+        longitude: -110.7413646,
+        state: 'CA'
+    },
+    {   
+        id: 8,
+        name: 'Lane Fertility Center',
+        phone: '415-893-0391',
+        website: 'lanefertilityinstitute.com',
+        city: 'San Francisco',
+        latitude: 39.5293205,
+        longitude: -117.7413646,
+        state: 'CA'
+    },
+    {   
+        id: 9,
+        name: 'Newport Fertility Center',
+        phone: '949-222-1290',
+        website: 'newportfertility.com',
+        city: 'Roseville',
+        latitude: 37.5293205,
+        longitude: -118.7413646,
+        state: 'CA'
+    },
+    {   
+        id: 10,
+        name: 'Northern California Fertility Medical Center',
+        phone: '916-773-2229',
+        website: 'ncfmc.com',
+        city: 'Roseville',
+        latitude: 40.5293205,
+        longitude: -107.7413646,
+        state: 'CA'
+    }
+];
+
+
 // DOM constants
 const mapArea = $('[data-m-area="map-area"]');
 const mapStates = $('[data-m-area="states"]');
@@ -81,7 +185,7 @@ aquaSeries.mapImages.template.propertyFields.blank = "blank";
 aquaSeries.mapImages.template.propertyFields.id = "id";
 
 var marker = aquaSeries.mapImages.template.createChild(am4core.Image);
-marker.href = "pin.svg";
+marker.href = "pin_blue.svg";
 marker.propertyFields.href = "icon";
 marker.width = 11;
 marker.height = 11;
@@ -90,133 +194,41 @@ marker.horizontalCenter = "middle";
 marker.verticalCenter = "middle";
 
 aquaSeries.mapImages.template.events.on('hit', function (ev) {
-    console.log(ev.target);
-    mainArea.trigger('map:hit', ev.target);
+    const data = {
+        t: ev.target.id,
+        p: ev.point
+    };
+    mainArea.trigger('map:hit', data);
 }, this);
 
 var colorSet = new am4core.ColorSet();
-aquaSeries.data = [
-    {
-        "id": 287,
-        "blank": null,
-        "title": "Acuario de Sevilla",
-        "country": "Spain",
-        "date": "June, 2020",
-        "image": "pin.svg",
-        "url": "website url",
-        "icon": "pin.svg",
-        "latitude": 33.557596,
-        "longitude": -117.6778945,
-        "color": "#25d8c0"
-    },
-    {
-        "id": 288,
-        "blank": null,
-        "title": "New York",
-        "country": "Spain",
-        "date": "June, 2020",
-        "image": "pin.svg",
-        "url": "website url",
-        "icon": "pin.svg",
-        "latitude": 40.7166625,
-        "longitude": -74.0548753,
-        "color": "#25d8c0"
-    }
-];
+aquaSeries.data = offices;
 
-const offices = [
-    {
-        name: 'Acacio Fertility Center',
-        phone: '949-249-9200',
-        website: 'acaciofertility.com',
-        city: 'Laguna Niguel',
-        lat: 33.5293205,
-        lng: -117.7413646,
-        state: 'CA'
-    },
-    {
-        name: 'California Center for Reproductive Health',
-        phone: '310-550-1951',
-        website: 'center4reproduction.com',
-        city: 'West Hollywood',
-        lat: 33.5293205,
-        lng: -117.7413646,
-        state: 'CA'
-    },
-    {
-        name: 'California Fertility Partners',
-        phone: '310-828-4008',
-        website: 'californiafertilitypartners.com',
-        city: 'Los Angeles',
-        lat: 33.5293205,
-        lng: -117.7413646,
-        state: 'CA'
-    },
-    {
-        name: 'CARE for the Bay Area',
-        phone: '408-628-0783',
-        website: 'care4ba.com',
-        city: 'Los Gatos',
-        lat: 33.5293205,
-        lng: -117.7413646,
-        state: 'CA'
-    },
-    {
-        name: 'Huntington Reproductive Center (Encino)',
-        phone: '408-628-0783',
-        website: 'care4ba.com',
-        city: 'Los Gatos',
-        lat: 33.5293205,
-        lng: -117.7413646,
-        state: 'CA'
-    },
-    {
-        name: 'Huntington Reproductive Center (Fullerton)',
-        phone: '714-738-4200',
-        website: 'havingbabies.com',
-        city: 'Fullerton',
-        lat: 33.5293205,
-        lng: -117.7413646,
-        state: 'CA'
-    },
-    {
-        name: 'Huntington Reproductive Center (Newport Beach)',
-        phone: '949-287-5600',
-        website: 'havingbabies.com',
-        city: 'Newport Beach',
-        lat: 33.5293205,
-        lng: -117.7413646,
-        state: 'CA'
-    },
-    {
-        name: 'Lane Fertility Center',
-        phone: '415-893-0391',
-        website: 'lanefertilityinstitute.com',
-        city: 'San Francisco',
-        lat: 33.5293205,
-        lng: -117.7413646,
-        state: 'CA'
-    },
-    {
-        name: 'Newport Fertility Center',
-        phone: '949-222-1290',
-        website: 'newportfertility.com',
-        city: 'Roseville',
-        lat: 33.5293205,
-        lng: -117.7413646,
-        state: 'CA'
-    },
-    {
-        name: 'Northern California Fertility Medical Center',
-        phone: '916-773-2229',
-        website: 'ncfmc.com',
-        city: 'Roseville',
-        lat: 33.5293205,
-        lng: -117.7413646,
-        state: 'CA'
-    }
-];
+// ============== Filter events ==============
+// Search input
+mainArea.on('map:search', (e, q) => {
+    __m__filter_by_name(q);
+});
 
+// Change State 
+mainArea.on('map:state', (e, value) => {
+    __m__filter_by_state(value);
+});
+
+// Change City
+mainArea.on('map:city', (e, value) => {
+    __m__filter_by_city(value);
+});
+
+// no filter/search result
+mainArea.on('map:not-found', () => {
+    __m__build_list();
+});
+
+// hit on map
+mainArea.on('map:hit', (e, data) => {
+    console.log(data);
+});
 
 // ============== DOM builders ==============
 function __m__build_item(item) {
@@ -228,12 +240,16 @@ function __m__build_item(item) {
         '    <div class="mo-item-cell state">' + item.state + '</div></div>';
 }
 
-function __m__build_list(list) {
-    let output = '';
-    list.map(i => {
-        output += __m__build_item(i);
-    });
-    mapArea.html(output);
+function __m__build_list(list=[]) {
+    if (list.length > 0) {
+        let output = '';
+        list.map(i => {
+            output += __m__build_item(i);
+        });
+        mapArea.html(output);
+    } else {
+        mapArea.html('<p>Not found</p>');
+    }
 }
 
 function __m__build_states(states) {
@@ -272,32 +288,6 @@ function __m__filter_by_city(q) {
     const r = offices.filter(o => o.city === q);
     r.length > 0 ? __m__build_list(r) : mainArea.trigger('map:not-found');
 }
-
-// ============== Filter events ==============
-// Search input
-mainArea.on('map:search', (e, q) => {
-    __m__filter_by_name(q);
-});
-
-// Change State 
-mainArea.on('map:state', (e, value) => {
-    __m__filter_by_state(value);
-});
-
-// Change City
-mainArea.on('map:city', (e, value) => {
-    __m__filter_by_city(value);
-});
-
-// no filter/search result
-mainArea.on('map:not-found', () => {
-    __m__build_list(offices);
-});
-
-// hit on map
-mainArea.on('map:hit', data => {
-    console.log(data);
-});
 
 // ============== DOM triggers ==============
 mapSearch.on('keyup', e => mainArea.trigger('map:search', e.target.value));
