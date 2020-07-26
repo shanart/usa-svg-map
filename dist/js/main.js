@@ -226,16 +226,29 @@ mainArea.on('map:close-modal', function () {
 }); // hit on map
 
 mainArea.on('map:hit', function (e, data) {
-  console.log(data);
-
   __m__show_modal_position(data.point);
+
+  __m__filter_by_id(data.id);
 }); // ============== DOM builders ==============
 
 function __m__show_modal_position(point) {
-  mapModal.css({
+  mapModal.removeClass('right');
+  var screen_w = $(window).width();
+  var modal_w = mapModal.outerWidth() + 35;
+  var styles = {
     top: point.y - 46 + 'px',
     left: point.x + 15 + 'px'
-  }).addClass('open');
+  };
+
+  if (point.x > screen_w / 2) {
+    styles = {
+      top: point.y - 46 + 'px',
+      left: point.x - modal_w + 15 + 'px'
+    };
+    mapModal.addClass('right');
+  }
+
+  mapModal.css(styles).addClass('open');
 }
 
 function __m__build_item(item) {
@@ -306,6 +319,13 @@ function __m__filter_by_city(q) {
     return o.city === q;
   });
   r.length > 0 ? __m__build_list(r) : mainArea.trigger('map:not-found');
+}
+
+function __m__filter_by_id(id) {
+  var r = offices.filter(function (o) {
+    return o.id === id;
+  });
+  r.length > 0 ? __m__build_list(r) : mainArea.trigger('map:not-found');
 } // ============== DOM triggers ==============
 
 
@@ -322,5 +342,5 @@ closeModal.on('click', function () {
   return mainArea.trigger('map:close-modal');
 });
 $(document).on('scroll', function () {
-  mainArea.trigger('map:close-modal');
+  return mainArea.trigger('map:close-modal');
 });

@@ -259,17 +259,27 @@ mainArea.on('map:close-modal', () => {
 
 // hit on map
 mainArea.on('map:hit', (e, data) => {
-    console.log(data);
     __m__show_modal_position(data.point);
-
+    __m__filter_by_id(data.id);
 });
 
 // ============== DOM builders ==============
 function __m__show_modal_position(point) {
-    mapModal.css({
+    mapModal.removeClass('right');
+    const screen_w = $(window).width();
+    const modal_w = mapModal.outerWidth() + 35;
+    let styles = {
         top: (point.y - 46) + 'px',
         left: (point.x + 15) + 'px'
-    }).addClass('open');
+    };
+    if (point.x > ( screen_w / 2 )) {
+        styles = {
+            top: (point.y - 46) + 'px',
+            left: ((point.x - modal_w) + 15) + 'px'
+        };
+        mapModal.addClass('right');
+    }
+    mapModal.css(styles).addClass('open');
 }
 
 function __m__build_item(item) {
@@ -329,12 +339,14 @@ function __m__filter_by_city(q) {
     const r = offices.filter(o => o.city === q);
     r.length > 0 ? __m__build_list(r) : mainArea.trigger('map:not-found');
 }
+function __m__filter_by_id(id) {
+    const r = offices.filter(o => o.id === id);
+    r.length > 0 ? __m__build_list(r) : mainArea.trigger('map:not-found');
+}
 
 // ============== DOM triggers ==============
 mapSearch.on('keyup', e => mainArea.trigger('map:search', e.target.value));
 mapStates.on('change', e => mainArea.trigger('map:state', e.target.value));
 mapCities.on('change', e => mainArea.trigger('map:city', e.target.value));
 closeModal.on('click', () => mainArea.trigger('map:close-modal'));
-$(document).on('scroll', function(){
-    mainArea.trigger('map:close-modal');
-});
+$(document).on('scroll', () => mainArea.trigger('map:close-modal'));
