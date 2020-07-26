@@ -27,7 +27,7 @@ var offices = [{
   website: 'acaciofertility.com',
   city: 'Laguna Niguel',
   latitude: 32.5293205,
-  longitude: -116.7413646,
+  longitude: -100.7413646,
   state: 'AK',
   icon: "./img/pin_blue.svg"
 }, {
@@ -37,7 +37,7 @@ var offices = [{
   website: 'center4reproduction.com',
   city: 'West Hollywood',
   latitude: 40.718484,
-  longitude: -74.0548753,
+  longitude: -86.0548753,
   state: 'CA',
   icon: "./img/pin_blue.svg"
 }, {
@@ -189,13 +189,19 @@ aquaSeries.mapImages.template.propertyFields.latitude = "latitude";
 aquaSeries.mapImages.template.propertyFields.blank = "blank";
 aquaSeries.mapImages.template.propertyFields.id = "id";
 var marker = aquaSeries.mapImages.template.createChild(am4core.Image);
-marker.href = "pin_blue.svg";
+marker.href = "./img/pin_blue.svg";
 marker.propertyFields.href = "icon";
 marker.width = 11;
 marker.height = 11;
 marker.nonScaling = true;
 marker.horizontalCenter = "middle";
 marker.verticalCenter = "middle";
+var label = aquaSeries.mapImages.template.createChild(am4core.Label);
+label.text = "{city}";
+label.horizontalCenter = "middle";
+label.padding(10, 0, 0, 0);
+label.fontSize = 10;
+label.fill = '#00478E';
 aquaSeries.mapImages.template.events.on('hit', function (ev) {
   mainArea.trigger('map:hit', {
     id: ev.target.id,
@@ -270,7 +276,7 @@ function __m__build_list() {
 }
 
 function __m__build_states(states) {
-  var output = '';
+  var output = '<option value="all">All</option>';
   states.map(function (s) {
     return output += '<option value="' + s + '">' + s + '</option>';
   });
@@ -279,7 +285,7 @@ function __m__build_states(states) {
 
 function __m__collect_cities() {
   var cities = [],
-      output = '';
+      output = '<option value="all">All</option>';
   offices.map(function (o) {
     return !cities.includes(o.city) ? cities.push(o.city) : null;
   });
@@ -308,17 +314,25 @@ function __m__filter_by_name(q) {
 }
 
 function __m__filter_by_state(q) {
-  var r = offices.filter(function (o) {
-    return o.state === q;
-  });
-  r.length > 0 ? __m__build_list(r) : mainArea.trigger('map:not-found');
+  if (q !== 'all') {
+    var r = offices.filter(function (o) {
+      return o.state === q;
+    });
+    r.length > 0 ? __m__build_list(r) : mainArea.trigger('map:not-found');
+  } else {
+    __m__build_list(offices);
+  }
 }
 
 function __m__filter_by_city(q) {
-  var r = offices.filter(function (o) {
-    return o.city === q;
-  });
-  r.length > 0 ? __m__build_list(r) : mainArea.trigger('map:not-found');
+  if (q !== 'all') {
+    var r = offices.filter(function (o) {
+      return o.city === q;
+    });
+    r.length > 0 ? __m__build_list(r) : mainArea.trigger('map:not-found');
+  } else {
+    __m__build_list(offices);
+  }
 }
 
 function __m__filter_by_id(id) {

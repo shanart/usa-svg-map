@@ -28,7 +28,7 @@ const offices = [
         website: 'acaciofertility.com',
         city: 'Laguna Niguel',
         latitude: 32.5293205,
-        longitude: -116.7413646,
+        longitude: -100.7413646,
         state: 'AK',
         icon: "./img/pin_blue.svg",
     },
@@ -39,7 +39,7 @@ const offices = [
         website: 'center4reproduction.com',
         city: 'West Hollywood',
         latitude: 40.718484,
-        longitude: -74.0548753,
+        longitude: -86.0548753,
         state: 'CA',
         icon: "./img/pin_blue.svg"
     },
@@ -217,13 +217,21 @@ aquaSeries.mapImages.template.propertyFields.blank = "blank";
 aquaSeries.mapImages.template.propertyFields.id = "id";
 
 var marker = aquaSeries.mapImages.template.createChild(am4core.Image);
-marker.href = "pin_blue.svg";
+marker.href = "./img/pin_blue.svg";
 marker.propertyFields.href = "icon";
 marker.width = 11;
 marker.height = 11;
 marker.nonScaling = true;
 marker.horizontalCenter = "middle";
 marker.verticalCenter = "middle";
+
+var label = aquaSeries.mapImages.template.createChild(am4core.Label);
+label.text = "{city}"
+label.horizontalCenter = "middle";
+label.padding(10,0,0,0);
+label.fontSize = 10;
+label.fill = '#00478E';
+
 
 aquaSeries.mapImages.template.events.on('hit', function (ev) {
     mainArea.trigger('map:hit', { id: ev.target.id, point: ev.point });
@@ -304,13 +312,13 @@ function __m__build_list(list=[]) {
 }
 
 function __m__build_states(states) {
-    let output = '';
+    let output = '<option value="all">All</option>';
     states.map(s => output += '<option value="' + s + '">' + s + '</option>');
     mapStates.html(output);
 }
 
 function __m__collect_cities() {
-    let cities = [], output = '';
+    let cities = [], output = '<option value="all">All</option>';
     offices.map(o => !cities.includes(o.city) ? cities.push(o.city) : null);
     cities.map(c => output += '<option value="' + c + '">' + c + '</option>');
     mapCities.html(output);
@@ -332,12 +340,20 @@ function __m__filter_by_name(q) {
     r.length > 0 ? __m__build_list(r) : mainArea.trigger('map:not-found');
 }
 function __m__filter_by_state(q) {
-    const r = offices.filter(o => o.state === q);
-    r.length > 0 ? __m__build_list(r) : mainArea.trigger('map:not-found');
+    if ( q !== 'all' ) {
+        const r = offices.filter(o => o.state === q);
+        r.length > 0 ? __m__build_list(r) : mainArea.trigger('map:not-found');
+    } else {
+        __m__build_list(offices);
+    }
 }
 function __m__filter_by_city(q) {
-    const r = offices.filter(o => o.city === q);
-    r.length > 0 ? __m__build_list(r) : mainArea.trigger('map:not-found');
+    if ( q !== 'all' ) {
+        const r = offices.filter(o => o.city === q);
+        r.length > 0 ? __m__build_list(r) : mainArea.trigger('map:not-found');
+    } else {
+        __m__build_list(offices);
+    }
 }
 function __m__filter_by_id(id) {
     const r = offices.filter(o => o.id === id);
