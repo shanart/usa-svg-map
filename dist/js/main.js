@@ -188,6 +188,7 @@ aquaSeries.mapImages.template.propertyFields.longitude = "longitude";
 aquaSeries.mapImages.template.propertyFields.latitude = "latitude";
 aquaSeries.mapImages.template.propertyFields.blank = "blank";
 aquaSeries.mapImages.template.propertyFields.id = "id";
+/*
 var marker = aquaSeries.mapImages.template.createChild(am4core.Image);
 marker.href = "./img/pin_blue.svg";
 marker.propertyFields.href = "icon";
@@ -195,7 +196,14 @@ marker.width = 11;
 marker.height = 11;
 marker.nonScaling = true;
 marker.horizontalCenter = "middle";
-marker.verticalCenter = "middle";
+marker.verticalCenter = "middle"; 
+*/
+
+var circle = aquaSeries.mapImages.template.createChild(am4core.Circle);
+circle.fill = "#fff";
+circle.radius = 5;
+circle.strokeWidth = 3;
+circle.stroke = "#00478E";
 var label = aquaSeries.mapImages.template.createChild(am4core.Label);
 label.text = "{city}";
 label.horizontalCenter = "middle";
