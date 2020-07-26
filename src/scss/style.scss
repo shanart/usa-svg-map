@@ -93,14 +93,25 @@ $f_color-light: #4E4E4E;
 }
 
 .m-data-modal {
-  position: absolute;
-  top: 200px;
-  left: 200px;
+  position: fixed;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  transform: scale(0);
   background-color: #fff;
   border: 1px solid $blue;
   border-radius: 10px;  
   padding: 30px 40px;
   font-size: 16px;
+
+  &.open {
+    transform: scale(1);
+    opacity: 1;
+    visibility: visible;
+    pointer-events: initial;
+  }
 
   &:before {
     content: '';
@@ -156,4 +167,12 @@ $f_color-light: #4E4E4E;
     outline: none;
   }
 
+
+  &.right {
+    &:before {
+      right: -11px;
+      left: auto;
+      transform: rotate(225deg);
+    }
+  }
 }

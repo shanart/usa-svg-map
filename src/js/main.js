@@ -139,7 +139,7 @@ const mapCities = $('[data-m-area="cities"]');
 const mapSearch = $('[data-m-area="search"]');
 const mainArea = $('[data-m-area="main"]');
 const closeModal = $('[data-m-modal-close]');
-
+const mapModal = $('[data-m-modal-container]');
 // ============== Helpers ==============
 
 // Slugify a string
@@ -254,16 +254,24 @@ mainArea.on('map:not-found', () => {
 });
 
 mainArea.on('map:close-modal', () => {
-    // __m__build_list();
-    console.log('close modal');
+    mapModal.removeClass('open');
 });
 
 // hit on map
 mainArea.on('map:hit', (e, data) => {
     console.log(data);
+    __m__show_modal_position(data.point);
+
 });
 
 // ============== DOM builders ==============
+function __m__show_modal_position(point) {
+    mapModal.css({
+        top: (point.y - 46) + 'px',
+        left: (point.x + 15) + 'px'
+    }).addClass('open');
+}
+
 function __m__build_item(item) {
     return '<div class="mo-item">' +
         '    <div class="mo-item-cell name">' + item.name + '</div>' +
@@ -327,3 +335,6 @@ mapSearch.on('keyup', e => mainArea.trigger('map:search', e.target.value));
 mapStates.on('change', e => mainArea.trigger('map:state', e.target.value));
 mapCities.on('change', e => mainArea.trigger('map:city', e.target.value));
 closeModal.on('click', () => mainArea.trigger('map:close-modal'));
+$(document).on('scroll', function(){
+    mainArea.trigger('map:close-modal');
+});

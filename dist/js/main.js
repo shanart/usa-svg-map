@@ -126,7 +126,8 @@ var mapStates = $('[data-m-area="states"]');
 var mapCities = $('[data-m-area="cities"]');
 var mapSearch = $('[data-m-area="search"]');
 var mainArea = $('[data-m-area="main"]');
-var closeModal = $('[data-m-modal-close]'); // ============== Helpers ==============
+var closeModal = $('[data-m-modal-close]');
+var mapModal = $('[data-m-modal-container]'); // ============== Helpers ==============
 // Slugify a string
 
 function slugify(str) {
@@ -221,13 +222,21 @@ mainArea.on('map:not-found', function () {
   __m__build_list();
 });
 mainArea.on('map:close-modal', function () {
-  // __m__build_list();
-  console.log('close modal');
+  mapModal.removeClass('open');
 }); // hit on map
 
 mainArea.on('map:hit', function (e, data) {
   console.log(data);
+
+  __m__show_modal_position(data.point);
 }); // ============== DOM builders ==============
+
+function __m__show_modal_position(point) {
+  mapModal.css({
+    top: point.y - 46 + 'px',
+    left: point.x + 15 + 'px'
+  }).addClass('open');
+}
 
 function __m__build_item(item) {
   return '<div class="mo-item">' + '    <div class="mo-item-cell name">' + item.name + '</div>' + '    <div class="mo-item-cell phone"><a href="tel:' + item.phone + '">' + item.phone + '</a></div>' + '    <div class="mo-item-cell website"><a href="https://' + item.website + '">' + item.website + '</a></div>' + '    <div class="mo-item-cell city">' + item.city + '</div>' + '    <div class="mo-item-cell state">' + item.state + '</div></div>';
@@ -311,4 +320,7 @@ mapCities.on('change', function (e) {
 });
 closeModal.on('click', function () {
   return mainArea.trigger('map:close-modal');
+});
+$(document).on('scroll', function () {
+  mainArea.trigger('map:close-modal');
 });
